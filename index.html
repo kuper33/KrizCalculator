@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор кризов</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 20px;
+background-color: #e0f7fa;
+color: #004d40;
+}
+
+h1 {
+color: #48c5b6;
+}
+
+input {
+margin: 10px 0;
+padding: 10px;
+border: 2px solid #48c5b6;
+border-radius: 5px;
+width: 100px;
+}
+
+.container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.result {
+font-size: 24px;
+font-weight: bold;
+}
+</style>
+</head>
+<body>
+<h1>Калькулятор кризов</h1>
+
+<div class="container">
+<div>
+<div>
+<label for="diamondAmount">Количество алмазов:</label>
+<input type="number" id="diamondAmount" min="0" oninput="calculate()">
+</div>
+<div>
+<label for="ironIngotAmount">Количество железных слитков:</label>
+<input type="number" id="ironIngotAmount" min="0" oninput="calculate()">
+</div>
+<div>
+<label for="goldIngotAmount">Количество золотых слитков:</label>
+<input type="number" id="goldIngotAmount" min="0" oninput="calculate()">
+</div>
+<div>
+<label for="enderPearlAmount">Количество эндер жемчугов:</label>
+<input type="number" id="enderPearlAmount" min="0" oninput="calculate()">
+</div>
+<div>
+<label for="emeraldAmount">Количество изумрудов:</label>
+<input type="number" id="emeraldAmount" min="0" oninput="calculate()">
+</div>
+<div>
+<label for="obsidianAmount">Количество обсидиана:</label>
+<input type="number" id="obsidianAmount" min="0" oninput="calculate()">
+</div>
+</div>
+<div id="totalResult" class="result"></div>
+</div>
+
+<h2>Расчет необходимых ресурсов:</h2>
+<label for="desiredKriz">Введите количество кризов:</label>
+<input type="number" id="desiredKriz" min="0" oninput="calculateResources()">
+<ul id="resourceResults"></ul>
+
+<script>
+const items = {
+diamond: { name: "Алмаз", price: 100 },
+iron_ingot: { name: "Железный слиток", price: 20 },
+gold_ingot: { name: "Золотой слиток", price: 45 },
+ender_pearl: { name: "Эндер жемчуг", price: 25 },
+emerald: { name: "Изумруд", price: 20 },
+obsidian: { name: "Обсидиан", price: 2 },
+};
+
+function calculate() {
+const diamondAmount = parseInt(document.getElementById("diamondAmount").value) || 0;
+const ironIngotAmount = parseInt(document.getElementById("ironIngotAmount").value) || 0;
+const goldIngotAmount = parseInt(document.getElementById("goldIngotAmount").value) || 0;
+const enderPearlAmount = parseInt(document.getElementById("enderPearlAmount").value) || 0;
+const emeraldAmount = parseInt(document.getElementById("emeraldAmount").value) || 0;
+const obsidianAmount = parseInt(document.getElementById("obsidianAmount").value) || 0;
+
+const diamondKriz = diamondAmount * items.diamond.price;
+const ironIngotKriz = ironIngotAmount * items.iron_ingot.price;
+const goldIngotKriz = goldIngotAmount * items.gold_ingot.price;
+const enderPearlKriz = enderPearlAmount * items.ender_pearl.price;
+const emeraldKriz = emeraldAmount * items.emerald.price;
+const obsidianKriz = obsidianAmount * items.obsidian.price;
+
+const totalKriz = diamondKriz + ironIngotKriz + goldIngotKriz + enderPearlKriz + emeraldKriz + obsidianKriz;
+
+document.getElementById("totalResult").innerText = `${totalKriz} кризов`;
+}
+
+function calculateResources() {
+const desiredKriz = parseInt(document.getElementById("desiredKriz").value) || 0;
+const resourceResults = document.getElementById("resourceResults");
+resourceResults.innerHTML = "";
+
+if (desiredKriz <= 0) {
+resourceResults.innerHTML = "<li>Введите корректное количество кризов.</li>";
+return;
+}
+
+const resourcesNeeded = {};
+
+Object.keys(items).forEach(key => {
+const item = items[key];
+const quantity = Math.ceil(desiredKriz / item.price);
+resourcesNeeded[item.name] = quantity;
+});
+
+Object.keys(resourcesNeeded).forEach(resource => {
+resourceResults.innerHTML += `<li>${resource}: ${resourcesNeeded[resource]} шт.</li>`;
+});
+}
+</script>
+</body>
+</html>
